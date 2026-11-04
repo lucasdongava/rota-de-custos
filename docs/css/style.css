@@ -524,3 +524,11 @@ body{transition:background .35s ease,color .35s ease}
 .rnone[hidden],#rankMore[hidden],.pop[hidden]{display:none}
 #rankMore{display:inline-block;margin-top:18px;font-size:13px}
 #rank{max-height:none;overflow:visible}
+
+/* seletor de pais no lugar do nome do pais, acima do valor */
+.crumb{gap:10px;min-height:0}
+.crumb .country{flex:none}
+.crumb .cmenu{left:0;right:auto;transform-origin:top left}
+.crumb .cbtn{font-size:15px}
+.crumb .clr{all:unset;cursor:pointer;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:16px;line-height:1;color:var(--muted);transition:background .2s,color .2s}
+.crumb .clr:hover,.crumb .clr:focus-visible{background:var(--surface);color:var(--fg)}

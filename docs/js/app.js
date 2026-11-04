@@ -205,13 +205,14 @@ function render(){
 
   // KPI
   const focus = S.sel ? DATA[S.sel] : countryAgg();
-  const crumb=document.getElementById('crumb'); crumb.innerHTML='';
+  const crumb=document.getElementById('crumb'); const cw=document.querySelector('.country');
+  crumb.innerHTML=''; crumb.appendChild(cw);   // o seletor de país ocupa o lugar do nome do país
   if (S.sel){
-    const b=document.createElement('button'); b.textContent=C.name; b.onclick=()=>select(null);
     const sp=document.createElement('span'); sp.className='sep'; sp.textContent='/';
     const cu=document.createElement('span'); cu.className='cur'; cu.textContent=focus.name;
-    crumb.append(b,sp,cu);
-  } else crumb.textContent=C.name;
+    const x=document.createElement('button'); x.className='clr'; x.type='button'; x.textContent='×'; x.title=tx('rs_less')?'×':'×'; x.setAttribute('aria-label','×'); x.onclick=()=>select(null);
+    crumb.append(sp,cu,x);
+  }
   setBig(mval(focus));
   document.getElementById('bigLbl').textContent = {avg:tx('big_avg'), total:tx('big_total',{n,nights:nightsW(n)}),
      delta: focus.delta>=0?tx('big_above'):tx('big_below')}[S.metric];
