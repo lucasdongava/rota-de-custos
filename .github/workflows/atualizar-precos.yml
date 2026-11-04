@@ -1,0 +1,57 @@
+name: Atualizar preços
+
+on:
+  schedule:
+    - cron: '17 8 * * *'     # todo dia às 05:17 (horário de Brasília)
+  workflow_dispatch:          # permite rodar na mão pela aba Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atualizar-precos
+  cancel-in-progress: false
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Buscar preços do dia
+        run: node collector/collect.mjs
+        env:
+          TP_TOKEN: ${{ secrets.TP_TOKEN }}
+          TP_MARKER: ${{ secrets.TP_MARKER }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          HOTELS_PER_RUN: ${{ vars.HOTELS_PER_RUN || '25' }}
+          MONTHS_AHEAD: ${{ vars.MONTHS_AHEAD || '3' }}
+          ORIGINS: ${{ vars.ORIGINS || 'VIX,GRU,GIG' }}
+
+      - name: Salvar no repositório
+        run: |
+          git config user.name "rota-de-custos-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/
+          if git diff --cached --quiet; then
+            echo "Sem mudanças nos preços."
+          else
+            git commit -m "Preços do dia $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      # Opcional: se o site estiver hospedado num servidor com FTP (ex.: servidor da Aldabra),
+      # descomente o passo abaixo e crie os secrets FTP_HOST, FTP_USER, FTP_PASS e FTP_DIR.
+      # - name: Enviar preços por FTP
+      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      #   with:
+      #     server: ${{ secrets.FTP_HOST }}
+      #     username: ${{ secrets.FTP_USER }}
+      #     password: ${{ secrets.FTP_PASS }}
+      #     local-dir: ./docs/data/
+      #     server-dir: ${{ secrets.FTP_DIR }}/data/
