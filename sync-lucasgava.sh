@@ -1,6 +1,10 @@
 #!/bin/sh
 # Copia docs/ para a pasta do lucasgava.com e aponta os precos para o repositorio (atualizados todo dia pelo coletor)
 set -e
+cd "$(dirname "$0")"
+# nova versao dos arquivos (o servidor guarda cache por 4 horas)
+V=$(date +%Y%m%d%H%M)
+sed -i -E "s#(css/style\.css|js/(geo|data|i18n|app)\.js)(\?v=[0-9]+)?\"#?v=$V\"#g" docs/index.html
 cd "$(dirname "$0")/../lucasgava-site"
 cp -r ../rota-de-custos/docs/. rota-de-custos/
 python - <<'PY'
