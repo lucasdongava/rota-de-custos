@@ -42,8 +42,8 @@ h1{font-size:17px;font-weight:600;margin:0;letter-spacing:-.01em;text-wrap:balan
 
 .kpi{margin-top:26px}
 .crumb{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:15px;min-height:22px}
-.crumb button{all:unset;cursor:pointer;color:var(--muted)}
-.crumb button:hover,.crumb button:focus-visible{color:var(--fg);text-decoration:underline;text-underline-offset:3px}
+.crumb>button{all:unset;cursor:pointer;color:var(--muted)}
+.crumb>button:hover,.crumb>button:focus-visible{color:var(--fg);text-decoration:underline;text-underline-offset:3px}
 .crumb .sep{color:var(--faint)}
 .crumb .cur{color:var(--fg)}
 .big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:2px}
@@ -532,3 +532,11 @@ body{transition:background .35s ease,color .35s ease}
 .crumb .cbtn{font-size:15px}
 .crumb .clr{all:unset;cursor:pointer;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:16px;line-height:1;color:var(--muted);transition:background .2s,color .2s}
 .crumb .clr:hover,.crumb .clr:focus-visible{background:var(--surface);color:var(--fg)}
+
+/* coluna de informacoes mais estreita; o mapa ganha o espaco */
+@media (min-width:921px){
+  .app{column-gap:clamp(56px,5vw,100px);grid-template-columns:min(calc((100vh - 205px) * 1.4815), calc(100vw - 64px - clamp(340px,27vw,420px) - clamp(56px,5vw,100px)), 1800px) clamp(340px,27vw,420px)}
+}
+
+.crumb .country button,.crumb .country button:hover,.crumb .country button:focus-visible{text-decoration:none !important}
+.cmenu button{text-decoration:none}

@@ -634,8 +634,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ sync
 const cbtn=document.getElementById('cbtn'), cmenu=document.getElementById('cmenu');
 function fillMenu(){
   cmenu.innerHTML = Object.entries(COUNTRIES).map(([k,c])=>{
-    const cnt = Object.keys(R).filter(id=>CC[id.slice(0,2)]===k).length;
-    return `<li><button role="option" data-c="${k}" class="${k===S.country?'on':''}" aria-selected="${k===S.country}"><span class="nm">${CN(k).name}</span><span style="display:flex;gap:8px;align-items:center"><span class="cnt num">${cnt}</span><svg class="tick" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3 3 7-7"/></svg></span></button></li>`}).join('');
+    return `<li><button role="option" data-c="${k}" class="${k===S.country?'on':''}" aria-selected="${k===S.country}"><span class="nm">${CN(k).name}</span><span style="display:flex;gap:8px;align-items:center"><svg class="tick" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3 3 7-7"/></svg></span></button></li>`}).join('');
 }
 cbtn.addEventListener('click',e=>{e.stopPropagation(); const open=cmenu.hidden; fillMenu(); cmenu.hidden=!open; cbtn.setAttribute('aria-expanded',open); if(open){ fitMenu(); cmenu.querySelector('.on').focus(); }});
 // mantém o menu inteiro dentro da tela, qualquer que seja a posição do botão
