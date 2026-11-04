@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Rota de Custos — onde vale a pena viajar em cada época</title>
+<meta name="description" content="Compare o custo de viagem por estado no Brasil, EUA, Canadá, México e China no seu período: diária, noite a noite, melhor época do ano e as melhores companhias aéreas saindo de Vitória.">
+<meta property="og:title" content="Rota de Custos">
+<meta property="og:description" content="Descubra onde e quando vale mais a pena viajar, com preços atualizados todo dia.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fcfcfc">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232457f5'/%3E%3Cpath d='M9 22l5-12 4 8 3-5 3 9' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<script>try{if(localStorage.getItem("rota.theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+</head>
+<body>
+<div class="settings">
+  <button class="set-btn" id="themeBtn" type="button" data-i18n-aria="theme" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.2"/></svg></button>
+  <div class="langwrap">
+    <button class="set-btn" id="langBtn" type="button" data-i18n-aria="language" aria-haspopup="listbox" aria-expanded="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.6 16.8 15.6H3.2Z"/></svg></button>
+    <ul class="langmenu" id="langMenu" role="listbox" hidden></ul>
+  </div>
+</div>
+<main class="app">
+  <section class="mapcol" aria-label="Mapa">
+    <div class="head">
+      <div>
+        <h1 id="title">Custo da estadia por estado</h1>
+        <p class="sub num" id="periodSub"></p>
+      </div>
+      <div class="country">
+        <button class="cbtn" id="cbtn" aria-haspopup="listbox" aria-expanded="false"><span id="cname">Estados Unidos</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6l4 4 4-4"/></svg></button>
+        <ul class="cmenu" id="cmenu" role="listbox" hidden></ul>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="crumb" id="crumb"></div>
+      <div class="big"><b class="num" id="bigVal">—</b><span id="bigLbl"></span></div>
+      <p class="status num" id="status"></p>
+    </div>
+    <div class="mapwrap" id="mapwrap">
+      <svg id="map" viewBox="0 0 800 540" role="img" data-i18n-aria="map"></svg>
+      <div class="tip" id="tip" aria-hidden="true"></div>
+    </div>
+    <div class="legend">
+      <div class="sw" id="sw"></div>
+      <div class="ticks num" id="ticks"></div>
+    </div>
+  </section>
+
+  <aside class="panel" aria-label="Período e valores">
+  <div class="curbox">
+    <div class="seg" role="group" data-i18n-aria="currency">
+      <button id="curBRL" aria-pressed="true">R$</button><button id="curLoc" aria-pressed="false">US$</button>
+    </div>
+    <label for="rate" id="rateLbl">US$ 1 =</label><input id="rate" type="number" step="0.01" min="0.001" value="5.20" class="num"><span>R$</span>
+  </div>
+    <div class="block">
+      <div class="phead"><h2 data-i18n="period">Período da estadia</h2><span class="nights num" id="nights">14 noites</span></div>
+      <div class="dates">
+        <div class="field"><label for="ci" data-i18n="arrive">Chegada</label><input type="date" id="ci" min="2026-01-01" max="2028-12-31"></div>
+        <div class="field"><label for="co" data-i18n="depart">Saída</label><input type="date" id="co" min="2026-01-02" max="2028-12-31"></div>
+      </div>
+      <p class="err" id="err" hidden></p>
+    </div>
+
+    <div class="tabs" role="tablist" id="tabs">
+      <span class="tab-hov" aria-hidden="true"></span><span class="tab-ind" aria-hidden="true"></span>
+      <button class="tab" role="tab" data-m="avg" aria-selected="true"><span class="lg" data-i18n="tab_avg_l">Diária média</span><span class="sh" data-i18n="tab_avg_s">Diária</span></button>
+      <button class="tab" role="tab" data-m="total" aria-selected="false"><span class="lg" data-i18n="tab_total_l">Total da estadia</span><span class="sh" data-i18n="tab_total_s">Total</span></button>
+      <button class="tab" role="tab" data-m="delta" aria-selected="false"><span class="lg" data-i18n="tab_delta_l">vs. resto do ano</span><span class="sh" data-i18n="tab_delta_s">vs. ano</span></button>
+    </div>
+
+    <div class="block">
+      <div class="rank-head"><span id="rankCount"></span><button class="sort" id="sort" data-i18n-aria="sort"><span id="rankMetric"></span> <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 3v10M2.5 10.5L5 13l2.5-2.5M11 13V3M8.5 5.5L11 3l2.5 2.5"/></svg></button></div>
+      <ol id="rank"></ol>
+    </div>
+
+    <div class="block">
+      <div class="days-head">
+        <h2 id="yearWho">Melhor época</h2>
+        <div class="readout num" id="yearRead"></div>
+      </div>
+      <div class="year" id="year" data-i18n-aria="months12"></div>
+      <div class="ylegend"><span><i style="background:var(--yr0)"></i><span data-i18n="yl0">Mais barato</span></span><span><i style="background:var(--yr1)"></i><span data-i18n="yl1">Bom preço</span></span><span><i style="background:var(--yr2)"></i><span data-i18n="yl2">Caro</span></span><span><i style="background:var(--yr3)"></i><span data-i18n="yl3">Mais caro</span></span></div>
+    </div>
+
+    <div class="block" id="flights">
+      <div class="days-head">
+        <h2 id="flWho">Voos</h2>
+        <div class="readout" id="flSrc"></div>
+      </div>
+      <div class="goal">
+        <span class="goal-lbl" data-i18n="goal">O que você busca?</span>
+        <div class="tabs" id="goal" role="radiogroup">
+          <span class="tab-hov" aria-hidden="true"></span><span class="tab-ind" aria-hidden="true"></span>
+          <button class="tab" role="radio" data-g="price" aria-checked="true" aria-selected="true"><span data-i18n="w_price">Preço</span></button>
+          <button class="tab" role="radio" data-g="quality" aria-checked="false" aria-selected="false"><span data-i18n="w_quality">Qualidade</span></button>
+          <button class="tab" role="radio" data-g="time" aria-checked="false" aria-selected="false"><span data-i18n="w_time">Tempo</span></button>
+        </div>
+      </div>
+      <div class="fhead"><span data-i18n="col_airline">Companhia</span><span data-i18n="w_price">Preço</span><span data-i18n="col_out">Ida</span><span data-i18n="col_score" data-i18n-title="col_score_t">Nota</span></div>
+      <ol id="fl"></ol>
+      <button class="more" id="flMore" hidden></button>
+      <p class="fltotal num" id="flTotal"></p>
+    </div>
+    <p class="panel-note" data-i18n="note">Voos: menores tarifas de ida e volta encontradas em buscas reais (Aviasales/Travelpayouts), atualizadas todo dia. Hotéis: preços do Google Hotels quando disponíveis; alimentação, transporte e os demais valores são estimativas com sazonalidade e feriados. Notas de qualidade baseadas no ranking Skytrax 2026. Confirme o preço final antes de comprar.</p>
+  </aside>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="js/geo.js"></script>
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
