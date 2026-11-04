@@ -78,7 +78,18 @@ function stay(id){
 
 /* ---------- estado ---------- */
 const GOALS = {price:[6,2,2], quality:[2,6,2], time:[2,2,6]};
-const S = {goal:'price', origin:CONFIG.origin, curMode:'BRL', asc:true, country:'USA', ci:PRESETS[0].a, co:PRESETS[0].b, metric:'avg', sel:null, hov:null, cur:'BRL', rate:CONFIG.defaultUsdBrl};
+// regioes mais visitadas de cada pais (ordem de popularidade)
+const POPULAR = {
+  BRA:['BR-SP','BR-RJ','BR-BA','BR-CE','BR-PE','BR-RN','BR-SC','BR-DF'],
+  USA:['US-FL','US-CA','US-NY','US-NV','US-TX','US-HI','US-IL','US-DC'],
+  CAN:['CA-ON','CA-QC','CA-BC','CA-AB','CA-NS'],
+  MEX:['MX-ROO','MX-DIF','MX-JAL','MX-BCS','MX-YUC','MX-OAX','MX-GUA','MX-NLE'],
+  JPN:['JP-13','JP-27','JP-26','JP-01','JP-40','JP-47','JP-22','JP-23'],
+  CHN:['CN-BJ','CN-SH','CN-GD','CN-SC','CN-ZJ','CN-SN','CN-HK','CN-YN']
+};
+const RANK_COLLAPSED = 8;
+const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const S = {rankAll:false, q:'', goal:'price', origin:CONFIG.origin, curMode:'BRL', asc:true, country:'USA', ci:PRESETS[0].a, co:PRESETS[0].b, metric:'avg', sel:null, hov:null, cur:'BRL', rate:CONFIG.defaultUsdBrl};
 let DATA = {}, ORDER = [];
 
 /* moedas: R$ ou a moeda local do país escolhido (no Brasil, US$). FX = R$ por 1 unidade */
@@ -241,7 +252,7 @@ function renderRank(){
   const vals=ORDER.map(id=>mval(DATA[id])), max=d3.max(vals.map(Math.abs))||1;
   let fresh=false;
   if (rankCountry!==S.country){
-    ol.innerHTML=''; rowEls.clear(); rankCountry=S.country; fresh=true; ol.scrollTop=0;
+    ol.innerHTML=''; rowEls.clear(); rankCountry=S.country; fresh=true; ol.scrollTop=0; S.q=''; S.rankAll=false; const rs=document.getElementById('rsearch'); if (rs) rs.value='';
     for (const id of ORDER){
       const li=document.createElement('li');
       li.innerHTML=`<button class="rk" data-id="${id}"><span class="i num"></span><span class="n">${DATA[id].name}</span><span class="v num"></span><span class="track"><span class="fill" style="width:0%"></span></span></button>`;
@@ -249,7 +260,7 @@ function renderRank(){
     }
     void ol.offsetWidth;
   }
-  const first=new Map(); if (!fresh) rowEls.forEach((li,id)=>{ first.set(id,li.getBoundingClientRect().top); li.getAnimations().forEach(x=>x.cancel()); });
+  const first=new Map(); if (!fresh) rowEls.forEach((li,id)=>{ if (li.offsetParent) first.set(id,li.getBoundingClientRect().top); li.getAnimations().forEach(x=>x.cancel()); });
   ORDER.forEach((id,i)=>{
     const li=rowEls.get(id), b=li.firstChild, v=mval(DATA[id]);
     b.classList.toggle('on', S.sel===id);
@@ -260,11 +271,39 @@ function renderRank(){
     f.style.width=Math.max(2,Math.abs(v)/max*100)+'%';
     ol.appendChild(li);
   });
+  applyRankFilter(true);
+  renderPopular();
   if (!fresh && !reduce) rowEls.forEach((li,id)=>{
+    if (!first.has(id) || !li.offsetParent) return;
     const dy=first.get(id)-li.getBoundingClientRect().top;
     if (Math.abs(dy)>0.5) li.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:640,easing:'cubic-bezier(.22,1,.36,1)'});
   });
 }
+
+/* ---------- busca, mais visitadas e lista recolhida ---------- */
+function applyRankFilter(){
+  const q=norm(S.q), more=document.getElementById('rankMore'), none=document.getElementById('rnone');
+  let shown=0, matches=0;
+  ORDER.forEach((id,i)=>{
+    const li=rowEls.get(id); if(!li) return;
+    const hit = !q || norm(DATA[id].name).includes(q) || id.slice(3).toLowerCase()===q;
+    if (hit) matches++;
+    const vis = hit && (q || S.rankAll || i<RANK_COLLAPSED);
+    li.hidden=!vis; if (vis) shown++;
+  });
+  none.hidden = matches>0;
+  document.getElementById('popWrap').hidden = !!q || !(POPULAR[S.country]||[]).some(id=>DATA[id]);
+  if (q || ORDER.length<=RANK_COLLAPSED){ more.hidden=true; }
+  else { more.hidden=false; more.textContent = S.rankAll ? tx('rs_less') : tx('rs_all',{n:ORDER.length}); }
+}
+function renderPopular(){
+  const box=document.getElementById('pop'); if(!box) return;
+  const ids=(POPULAR[S.country]||[]).filter(id=>DATA[id]);
+  box.innerHTML = ids.map(id=>`<button type="button" class="pchip${S.sel===id?' on':''}" data-id="${id}"><span class="pn">${DATA[id].name}</span><span class="pv num">${mfmt(mval(DATA[id]))}</span></button>`).join('');
+}
+document.getElementById('pop').addEventListener('click',e=>{ const b=e.target.closest('.pchip'); if(b) select(S.sel===b.dataset.id?null:b.dataset.id); });
+document.getElementById('rsearch').addEventListener('input',e=>{ S.q=e.target.value; applyRankFilter(); });
+document.getElementById('rankMore').addEventListener('click',()=>{ S.rankAll=!S.rankAll; applyRankFilter(); });
 
 /* ---------- gráfico noite a noite ---------- */
 let daysFocus=null;
@@ -748,6 +787,7 @@ async function detectOrigin(){
 function translateStatic(){
   document.documentElement.lang = LOC;
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=tx(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder=tx(el.dataset.i18nPh); });
   document.querySelectorAll('[data-i18n-aria]').forEach(el=>{ el.setAttribute('aria-label', tx(el.dataset.i18nAria)); el.title=tx(el.dataset.i18nAria); });
   document.querySelectorAll('[data-i18n-title]').forEach(el=>{ el.title=tx(el.dataset.i18nTitle); });
 }
