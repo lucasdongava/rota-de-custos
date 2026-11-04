@@ -540,3 +540,12 @@ body{transition:background .35s ease,color .35s ease}
 
 .crumb .country button,.crumb .country button:hover,.crumb .country button:focus-visible{text-decoration:none !important}
 .cmenu button{text-decoration:none}
+
+/* barra de rolagem da coluna de informacoes afastada do conteudo */
+@media (min-width:921px){
+  .panel{padding-right:26px;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .panel::-webkit-scrollbar{width:10px}
+  .panel::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px;border:3px solid transparent;background-clip:content-box}
+  .panel::-webkit-scrollbar-thumb:hover{background:var(--faint);background-clip:content-box;border:3px solid transparent}
+  .panel::-webkit-scrollbar-track{background:transparent}
+}
