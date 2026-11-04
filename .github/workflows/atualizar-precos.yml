@@ -42,6 +42,7 @@ jobs:
             echo "Sem mudanças nos preços."
           else
             git commit -m "Preços do dia $(date -u +%Y-%m-%d)"
+            git pull --rebase origin main
             git push
           fi
 
