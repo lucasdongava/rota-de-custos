@@ -641,7 +641,29 @@ function syncCur(){
   rateLbl.textContent=`${SYM[lc]} 1 =`;
   if (document.activeElement!==rateEl) rateEl.value=FX[lc].toFixed(FX[lc]<1?3:2);
 }
-function setCur(mode){ S.curMode=mode; render(); }
+const segEl=document.getElementById('curSeg'), segInd=segEl.querySelector('.tab-ind'), segHov=segEl.querySelector('.tab-hov');
+function syncSeg(instant){
+  const b=segEl.querySelector('button[aria-pressed="true"]'); if(!b) return;
+  if (instant){ segInd.style.transition='none'; }
+  placePill(segInd,b);
+  if (instant){ void segInd.offsetWidth; segInd.style.transition=''; }
+}
+segEl.addEventListener('pointerover',e=>{ const b=e.target.closest('button'); if(!b) return;
+  if (!segEl.classList.contains('hovering')){ segHov.style.transition='none'; placePill(segHov,b); void segHov.offsetWidth; segHov.style.transition=''; }
+  placePill(segHov,b); segEl.classList.add('hovering'); });
+segEl.addEventListener('pointerleave',()=>segEl.classList.remove('hovering'));
+window.addEventListener('resize',()=>syncSeg(true));
+requestAnimationFrame(()=>syncSeg(true));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>syncSeg(true));
+function setCur(mode){
+  if (mode===S.curMode) return;
+  if (reduce){ S.curMode=mode; render(); syncSeg(true); return; }
+  // troca suave: os valores esmaecem, a moeda muda e eles voltam
+  const root=document.documentElement;
+  bBRL.setAttribute('aria-pressed',mode==='BRL'); bLoc.setAttribute('aria-pressed',mode==='local'); syncSeg();
+  root.classList.add('cur-fade');
+  setTimeout(()=>{ S.curMode=mode; render(); requestAnimationFrame(()=>requestAnimationFrame(()=>root.classList.remove('cur-fade'))); },190);
+}
 bBRL.onclick=()=>setCur('BRL'); bLoc.onclick=()=>setCur('local');
 rateEl.addEventListener('input',()=>{const v=parseFloat(rateEl.value.replace(',','.')); if(v>0){FX[locCur()]=v; render();}});
 

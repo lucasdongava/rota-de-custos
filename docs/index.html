@@ -54,7 +54,8 @@
 
   <aside class="panel" aria-label="Período e valores">
   <div class="curbox">
-    <div class="seg" role="group" data-i18n-aria="currency">
+    <div class="seg" id="curSeg" role="group" data-i18n-aria="currency">
+      <span class="tab-hov" aria-hidden="true"></span><span class="tab-ind" aria-hidden="true"></span>
       <button id="curBRL" aria-pressed="true">R$</button><button id="curLoc" aria-pressed="false">US$</button>
     </div>
     <label for="rate" id="rateLbl">US$ 1 =</label><input id="rate" type="number" step="0.01" min="0.001" value="5.20" class="num"><span>R$</span>

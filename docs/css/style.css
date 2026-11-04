@@ -21,7 +21,7 @@ img{max-width:100%}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
 .app{max-width:1280px;margin:0 auto;padding-block:32px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:40px;align-items:start}
+  display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:40px;align-items:start}
 @media (max-width:920px){.app{grid-template-columns:minmax(0,1fr);gap:28px;padding-block:20px}}
 .num{font-variant-numeric:tabular-nums}
 
@@ -52,7 +52,7 @@ h1{font-size:17px;font-weight:600;margin:0;letter-spacing:-.01em;text-wrap:balan
 
 .mapwrap{position:relative;margin-top:14px;border-radius:12px;overflow:hidden;background:var(--bg);transition:background .3s}
 .mapwrap.zoomed{background:var(--surface)}
-#map{display:block;width:100%;height:auto;max-width:760px;margin-inline:auto;touch-action:manipulation}
+#map{display:block;width:100%;height:auto;max-width:1000px;margin-inline:auto;touch-action:manipulation}
 @media (min-width:921px){#map{max-height:calc(100vh - 290px)}}
 .reg{stroke:var(--mapstroke);stroke-width:.9;vector-effect:non-scaling-stroke;cursor:pointer;transition:opacity .25s,fill .35s}
 .reg.dim{opacity:.32}
@@ -397,7 +397,7 @@ body{transition:background .35s ease,color .35s ease}
   body{display:flex;flex-direction:column}
   .app{flex:1 1 auto;min-height:0;width:100%;padding-block:56px 4px;grid-template-rows:minmax(0,1fr);align-items:stretch}
   .mapcol{position:static;min-height:0;overflow:hidden;align-self:stretch}
-  #map{max-height:max(220px,calc(100vh - 330px))}
+  #map{max-height:max(220px,calc(100vh - 315px))}
   .panel{min-height:0;overflow-y:auto;padding-right:12px;padding-bottom:32px;scrollbar-width:thin;overscroll-behavior:contain}
   .note{flex:none;width:100%;padding-block:6px 12px}
 }
@@ -410,3 +410,63 @@ body{transition:background .35s ease,color .35s ease}
 .panel>.panel-note{margin:48px 0 0;font-size:11.5px;line-height:1.5;color:var(--faint);max-width:none}
 .panel>.panel-upd{margin:40px 0 0;font-size:12px;color:var(--muted)}
 .panel>.panel-upd+.panel-note{margin-top:10px}
+
+/* transicao suave ao trocar de moeda */
+#bigVal,#ticks,#rank,#days,#yearRead,#flTotal{transition:opacity .22s ease}
+#fl{transition:height .55s cubic-bezier(.22,1,.36,1),opacity .22s ease}
+.cur-fade :is(#bigVal,#ticks,#rank,#days,#yearRead,#fl,#flTotal){opacity:0}
+@media (prefers-reduced-motion:reduce){.cur-fade :is(#bigVal,#ticks,#rank,#days,#yearRead,#fl,#flTotal){opacity:1;filter:none}}
+
+/* seletor de pais em formato de botao */
+.cbtn,.cbtn:not(:focus-visible){border:1px solid var(--line);background:var(--surface);padding:9px 14px 9px 16px;border-radius:10px;color:var(--fg);font-size:14px;font-weight:600;gap:10px;box-shadow:0 1px 2px rgba(13,19,34,.06);transition:border-color .2s,background .2s,box-shadow .2s,transform .2s}
+.cbtn:hover{border-color:var(--fg);background:var(--bg);box-shadow:0 2px 8px rgba(13,19,34,.1);color:var(--fg)}
+.cbtn:active{transform:scale(.98)}
+.cbtn svg{width:16px;height:16px;color:var(--fg);transition:transform .2s}
+.cbtn[aria-expanded="true"] svg{transform:rotate(180deg)}
+
+/* ---------- espacamento geral mais arejado ---------- */
+.panel>.block{margin-top:80px}
+.panel>.tabs{margin-top:64px}
+.panel>.tabs+.block{margin-top:28px}
+.panel>.curbox+.block{margin-top:0}
+.phead,.days-head{margin-bottom:18px}
+.dates{margin-top:0;gap:16px}
+.field{gap:8px}
+.field input{padding:12px 14px}
+.chips{margin-top:18px;gap:8px}
+.chip{padding:8px 15px}
+.tabs{padding:4px;gap:4px}
+.tab{padding:11px 10px}
+.rank-head{padding-bottom:16px}
+.rk{padding:15px 6px 14px;gap:8px 14px}
+.year{gap:6px;margin-top:20px}
+.mc{gap:9px}
+.mc i{height:34px}
+.ylegend{margin-top:22px;gap:18px}
+#days{margin-top:18px}
+.dlegend{margin-top:16px}
+.goal{margin-top:6px}
+.goal-lbl{display:block;margin-bottom:14px}
+.fhead{margin-top:28px;padding:0 10px 12px}
+.fr{padding:16px 10px}
+.more{margin-top:16px}
+.fltotal{margin:22px 0 0;line-height:1.6}
+.kpi{margin-top:26px}
+.big{margin-top:4px}
+.status{margin-top:8px}
+.legend{margin-top:20px}
+@media (min-width:921px){
+  #rank{max-height:none;overflow:visible}
+  .panel{padding-right:20px;padding-bottom:56px}
+  .panel>.panel-upd{margin-top:64px}
+  .app{column-gap:56px}
+}
+
+/* seletor de moeda com a mesma pilula deslizante das abas */
+.seg{position:relative;isolation:isolate}
+.seg button{position:relative;z-index:2;transition:color .3s ease}
+.seg button[aria-pressed="true"],.seg button[aria-pressed="true"]:hover{background:transparent !important;box-shadow:none !important;color:var(--fg)}
+.seg .tab-ind,.seg .tab-hov{border-radius:5px;top:2px;bottom:2px}
+.seg .tab-ind{background:var(--bg);box-shadow:0 1px 3px rgba(13,19,34,.10),0 0 0 1px var(--line)}
+.seg button:hover{color:var(--fg)}
+.seg.hovering .tab-hov{opacity:1}
