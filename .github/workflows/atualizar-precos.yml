@@ -3,6 +3,7 @@ name: Atualizar preços
 on:
   schedule:
     - cron: '17 8 * * *'     # todo dia às 05:17 (horário de Brasília)
+    - cron: '17 20 * * *'    # e às 17:17 (a cobertura de voos vai acumulando)
   workflow_dispatch:          # permite rodar na mão pela aba Actions
 
 permissions:
@@ -30,8 +31,8 @@ jobs:
           TP_MARKER: ${{ secrets.TP_MARKER }}
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
           HOTELS_PER_RUN: ${{ vars.HOTELS_PER_RUN || '25' }}
-          MONTHS_AHEAD: ${{ vars.MONTHS_AHEAD || '3' }}
-          ORIGINS: ${{ vars.ORIGINS || 'VIX,GRU,GIG' }}
+          MONTHS_AHEAD: ${{ vars.MONTHS_AHEAD || '6' }}
+          ORIGINS: ${{ vars.ORIGINS || 'GRU,GIG,BSB,CNF,VIX,SSA,REC,FOR,POA,CWB' }}
 
       - name: Salvar no repositório
         run: |

@@ -44,7 +44,7 @@ const ONLY = (env.ONLY_DESTINATIONS || '').split(',').map(s => s.trim()).filter(
 const TP_BASE = env.TP_BASE || 'https://api.travelpayouts.com';
 const SERP_BASE = env.SERP_BASE || 'https://serpapi.com';
 const FX_URL = env.FX_URL || 'https://economia.awesomeapi.com.br/json/last/USD-BRL,CAD-BRL,MXN-BRL,CNY-BRL,JPY-BRL';
-const FLIGHT_KEEP_DAYS = 7;   // mantém um preço antigo de voo por até 7 dias se a busca do dia falhar
+const FLIGHT_KEEP_DAYS = 10;  // mantém um preço antigo de voo por até 10 dias se a busca do dia não achar nada (a cobertura vai acumulando)
 const DAY = 864e5;
 
 const log = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
@@ -114,8 +114,19 @@ async function fetchFx(prev) {
     log(`câmbio: ${Object.entries(out).map(([k, v]) => `${k} R$ ${v.toFixed(4)}`).join(' · ')}`);
     return { fx: out, at: new Date().toISOString() };
   } catch (e) {
-    log(`câmbio: falhou (${e.message}); mantendo o anterior`);
-    return prev;
+    log(`câmbio: fonte 1 falhou (${e.message}); tentando a fonte 2`);
+    try {
+      const j = await getJson(env.FX_URL2 || 'https://open.er-api.com/v6/latest/USD');
+      const r = j?.rates, brl = r?.BRL;
+      if (!(brl > 0)) throw new Error('resposta sem BRL');
+      out.USD = brl;
+      for (const c of ['CAD', 'MXN', 'CNY', 'JPY']) if (r[c] > 0) out[c] = brl / r[c];
+      log(`câmbio (fonte 2): ${Object.entries(out).map(([k, v]) => `${k} R$ ${v.toFixed(4)}`).join(' · ')}`);
+      return { fx: out, at: new Date().toISOString() };
+    } catch (e2) {
+      log(`câmbio: falhou (${e2.message}); mantendo o anterior`);
+      return prev;
+    }
   }
 }
 
