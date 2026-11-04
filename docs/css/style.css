@@ -549,3 +549,15 @@ body{transition:background .35s ease,color .35s ease}
   .panel::-webkit-scrollbar-thumb:hover{background:var(--faint);background-clip:content-box;border:3px solid transparent}
   .panel::-webkit-scrollbar-track{background:transparent}
 }
+
+/* espacamento do cabecalho da coluna do mapa (titulo, pais, valor e aviso) */
+.head{row-gap:6px}
+.sub{margin-top:8px}
+.kpi{margin-top:36px}
+.crumb{margin-bottom:18px}
+.big{margin-top:0;gap:12px}
+.status{margin-top:16px}
+.mapwrap{margin-top:20px}
+@media (min-width:921px){
+  .app{grid-template-columns:min(calc((100vh - 250px) * 1.4815), calc(100vw - 64px - clamp(340px,27vw,420px) - clamp(56px,5vw,100px)), 1800px) clamp(340px,27vw,420px)}
+}
