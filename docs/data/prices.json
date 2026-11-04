@@ -1,1 +1,1 @@
-{"version":2,"updatedAt":null,"usdBrl":null,"fx":{},"origins":[],"hotels":{}}
+{"version":2,"updatedAt":"2026-11-04T17:00:03.199Z","currency":"USD","usdBrl":null,"fx":{},"fxAt":null,"origins":["VIX","GRU","GIG"],"hotels":{},"sources":{"flights":"Aviasales Data API (Travelpayouts) — menores tarifas encontradas em buscas reais","hotels":"Google Hotels via SerpApi — diária mediana de hotéis 3–4★","fx":"AwesomeAPI"}}
