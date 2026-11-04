@@ -564,3 +564,9 @@ body{transition:background .35s ease,color .35s ease}
 
 #sort[hidden]{display:none}
 #rank:empty{margin:0}
+
+/* botao de pais menor */
+.cbtn,.cbtn:not(:focus-visible){padding:6px 10px 6px 12px;font-size:13px;gap:8px;border-radius:8px}
+.crumb .cbtn{font-size:13px}
+.cbtn svg{width:13px;height:13px}
+.cmenu button{font-size:13px}
