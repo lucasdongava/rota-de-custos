@@ -2,12 +2,12 @@
 window.TRIP_DATA = (function(){
 /* Países: nome, unidades e projeção do mapa [função d3, rotate, parallels] */
 const COUNTRIES = {
-  BRA:{name:'Brasil', unit:'estados', one:'estado', title:'Custo da estadia por estado', proj:['geoConicConformal',[54,0],[-5,-25]]},
-  USA:{name:'Estados Unidos', unit:'estados', one:'estado', title:'Custo da estadia por estado', proj:['geoAlbersUsa']},
-  CAN:{name:'Canadá', unit:'províncias e territórios', one:'província', title:'Custo da estadia por província', proj:['geoConicConformal',[96,0],[49,77]]},
-  MEX:{name:'México', unit:'estados', one:'estado', title:'Custo da estadia por estado', proj:['geoConicConformal',[102,0],[17.5,29.5]]},
-  JPN:{name:'Japão', unit:'províncias', one:'província', title:'Custo da estadia por província', proj:['geoConicConformal',[-137,0],[33,44]]},
-  CHN:{name:'China', unit:'províncias e regiões', one:'província', title:'Custo da estadia por província', proj:['geoConicEqualArea',[-105,0],[25,47]]}
+  BRA:{name:'Brasil', unit:'estados', one:'estado', title:'Custo da estadia por país/estado', proj:['geoConicConformal',[54,0],[-5,-25]]},
+  USA:{name:'Estados Unidos', unit:'estados', one:'estado', title:'Custo da estadia por país/estado', proj:['geoAlbersUsa']},
+  CAN:{name:'Canadá', unit:'províncias e territórios', one:'província', title:'Custo da estadia por país/estado', proj:['geoConicConformal',[96,0],[49,77]]},
+  MEX:{name:'México', unit:'estados', one:'estado', title:'Custo da estadia por país/estado', proj:['geoConicConformal',[102,0],[17.5,29.5]]},
+  JPN:{name:'Japão', unit:'províncias', one:'província', title:'Custo da estadia por país/estado', proj:['geoConicConformal',[-137,0],[33,44]]},
+  CHN:{name:'China', unit:'províncias e regiões', one:'província', title:'Custo da estadia por país/estado', proj:['geoConicEqualArea',[-105,0],[25,47]]}
 };
 
 /* ---------- perfis de sazonalidade (multiplicador mensal da hospedagem, jan→dez) ---------- */
