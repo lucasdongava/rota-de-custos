@@ -1,4 +1,4 @@
-/* Rota de Custos — dados base do modelo (compartilhado entre o site e o coletor) */
+/* Roots — dados base do modelo (compartilhado entre o site e o coletor) */
 window.TRIP_DATA = (function(){
 /* Países: nome, unidades e projeção do mapa [função d3, rotate, parallels] */
 const COUNTRIES = {

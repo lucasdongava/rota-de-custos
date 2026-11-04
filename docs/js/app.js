@@ -1,4 +1,4 @@
-/* Rota de Custos — lógica do site.
+/* Roots — lógica do site.
    Dados base: js/data.js · contornos: js/geo.js · preços reais: data/prices.json (gerado pelo coletor diário) */
 (function(){
 'use strict';

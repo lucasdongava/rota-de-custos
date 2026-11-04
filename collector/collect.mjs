@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Rota de Custos — coletor diário de preços
+ * Roots — coletor diário de preços
  *
  * Gera docs/data/prices.json com:
  *   - voos reais (menor tarifa de ida e volta por companhia, por destino e mês), um arquivo por aeroporto de saída
