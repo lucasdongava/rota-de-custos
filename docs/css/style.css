@@ -561,3 +561,6 @@ body{transition:background .35s ease,color .35s ease}
 @media (min-width:921px){
   .app{grid-template-columns:min(calc((100vh - 250px) * 1.4815), calc(100vw - 64px - clamp(340px,27vw,420px) - clamp(56px,5vw,100px)), 1800px) clamp(340px,27vw,420px)}
 }
+
+#sort[hidden]{display:none}
+#rank:empty{margin:0}

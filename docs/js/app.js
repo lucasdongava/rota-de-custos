@@ -289,13 +289,13 @@ function applyRankFilter(){
     const li=rowEls.get(id); if(!li) return;
     const hit = !q || norm(DATA[id].name).includes(q) || id.slice(3).toLowerCase()===q;
     if (hit) matches++;
-    const vis = hit && (q || S.rankAll || i<RANK_COLLAPSED);
+    const vis = hit && !!q;   // a lista só aparece enquanto a pessoa pesquisa
     li.hidden=!vis; if (vis) shown++;
   });
-  none.hidden = matches>0;
+  none.hidden = !q || matches>0;
+  const so=document.getElementById('sort'); if (so) so.hidden=!q;
   document.getElementById('popWrap').hidden = !!q || !(POPULAR[S.country]||[]).some(id=>DATA[id]);
-  if (q || ORDER.length<=RANK_COLLAPSED){ more.hidden=true; }
-  else { more.hidden=false; more.textContent = S.rankAll ? tx('rs_less') : tx('rs_all',{n:ORDER.length}); }
+  more.hidden=true;
 }
 function renderPopular(){
   const box=document.getElementById('pop'); if(!box) return;
