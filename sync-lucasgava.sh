@@ -4,7 +4,7 @@ set -e
 cd "$(dirname "$0")"
 # nova versao dos arquivos (o servidor guarda cache por 4 horas)
 V=$(date +%Y%m%d%H%M)
-sed -i -E "s#(css/style\.css|js/(geo|data|i18n|app)\.js)(\?v=[0-9]+)?\"#?v=$V\"#g" docs/index.html
+sed -i -E "s#(css/style\.css|js/(geo|data|i18n|app)\.js)(\?v=[0-9]+)?\"#\1?v=$V\"#g" docs/index.html
 cd "$(dirname "$0")/../lucasgava-site"
 cp -r ../rota-de-custos/docs/. rota-de-custos/
 python - <<'PY'
