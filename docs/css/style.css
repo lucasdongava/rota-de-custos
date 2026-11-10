@@ -570,10 +570,3 @@ body{transition:background .35s ease,color .35s ease}
 .crumb .cbtn{font-size:13px}
 .cbtn svg{width:13px;height:13px}
 .cmenu button{font-size:13px}
-
-/* logo */
-.logo{display:inline-block;margin:0 0 10px;line-height:0}
-.logo img{height:34px;width:auto;display:block}
-.logo-d{display:none!important}
-:root[data-theme="dark"] .logo-l{display:none}
-:root[data-theme="dark"] .logo-d{display:block!important}
